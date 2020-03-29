@@ -11,9 +11,10 @@
   "author": "Akhil Sagiraju",
   "license": "ISC",
   "devDependencies": {
+    "eslint": "^6.8.0",
     "jest": "^25.1.0",
-    "nodemon": "^2.0.2",
-    "eslint": "^6.8.0"
+    "lodash": "^4.17.15",
+    "nodemon": "^2.0.2"
   },
   "dependencies": {
     "cors": "^2.8.5",
