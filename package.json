@@ -4,9 +4,9 @@
   "description": "bloglist app from part4",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "dev": "nodemon index.js",
-    "test": "jest --verbose"
+    "start": "NODE_ENV=production node index.js",
+    "dev": "NODE_ENV=development nodemon index.js",
+    "test": "NODE_ENV=test jest --verbose --runInBand"
   },
   "author": "Akhil Sagiraju",
   "license": "ISC",
@@ -14,12 +14,14 @@
     "eslint": "^6.8.0",
     "jest": "^25.1.0",
     "lodash": "^4.17.15",
-    "nodemon": "^2.0.2"
+    "nodemon": "^2.0.2",
+    "supertest": "^4.0.2"
   },
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "express-async-errors": "^3.1.1",
     "mongoose": "^5.9.6"
   },
   "jest": {
