@@ -101,7 +101,7 @@ describe('deletion of a blog', () => {
 });
 
 describe('updating a blog', () => {
-  test.only('succeeds updating likes when likes is provided in request body', async () => {
+  test('succeeds updating likes when likes is provided in request body', async () => {
     const blogsAtStart = await helper.blogsInDb();
     const blogToUpdate = blogsAtStart[0];
 
