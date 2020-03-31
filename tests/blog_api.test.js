@@ -20,10 +20,6 @@ describe('where are some blogs saved initially', () => {
   test('blogs are returned as json', async () => {
     await api
       .get('/api/blogs')
-      .set(
-        'Authorization',
-        'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFra2kiLCJpZCI6IjVlODJlYWZlZDBhY2MyNzgyOGEzZmY1MCIsImlhdCI6MTU4NTY0ODcwNH0.9L8kT2ju81R7uc5ZUCJxicVXLosE4WiiVf36fFjafzU'
-      )
       .expect(200)
       .expect('Content-type', /application\/json/);
   });
@@ -34,12 +30,7 @@ describe('where are some blogs saved initially', () => {
   });
 
   test('all blogs have a property called id', async () => {
-    const response = await api
-      .get('/api/blogs')
-      .set(
-        'Authorization',
-        'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFra2kiLCJpZCI6IjVlODJlYWZlZDBhY2MyNzgyOGEzZmY1MCIsImlhdCI6MTU4NTY0ODcwNH0.9L8kT2ju81R7uc5ZUCJxicVXLosE4WiiVf36fFjafzU'
-      );
+    const response = await api.get('/api/blogs');
     response.body.forEach(blog => {
       expect(blog.id).toBeDefined();
     });
@@ -56,10 +47,6 @@ describe('addition of blogs', () => {
     };
     await api
       .post('/api/blogs')
-      .set(
-        'Authorization',
-        'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFra2kiLCJpZCI6IjVlODJlYWZlZDBhY2MyNzgyOGEzZmY1MCIsImlhdCI6MTU4NTY0ODcwNH0.9L8kT2ju81R7uc5ZUCJxicVXLosE4WiiVf36fFjafzU'
-      )
       .send(newBlog)
       .expect(201)
       .expect('Content-type', /application\/json/);
@@ -77,10 +64,6 @@ describe('addition of blogs', () => {
     };
     await api
       .post('/api/blogs')
-      .set(
-        'Authorization',
-        'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFra2kiLCJpZCI6IjVlODJlYWZlZDBhY2MyNzgyOGEzZmY1MCIsImlhdCI6MTU4NTY0ODcwNH0.9L8kT2ju81R7uc5ZUCJxicVXLosE4WiiVf36fFjafzU'
-      )
       .send(newBlogSansLikes)
       .expect(201);
     const blogsAtEnd = await helper.blogsInDb();
@@ -117,13 +100,7 @@ describe('deletion of a blog', () => {
     const blogsAtStart = await helper.blogsInDb();
     const blogToDelete = blogsAtStart[0];
 
-    await api
-      .delete(`/api/blogs/${blogToDelete.id}`)
-      .set(
-        'Authorization',
-        'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFra2kiLCJpZCI6IjVlODJlYWZlZDBhY2MyNzgyOGEzZmY1MCIsImlhdCI6MTU4NTY0ODcwNH0.9L8kT2ju81R7uc5ZUCJxicVXLosE4WiiVf36fFjafzU'
-      )
-      .expect(204);
+    await api.delete(`/api/blogs/${blogToDelete.id}`).expect(204);
     const blogsAtEnd = await helper.blogsInDb();
     expect(blogsAtEnd.length).toBe(blogsAtStart.length - 1);
 
