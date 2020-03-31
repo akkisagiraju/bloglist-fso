@@ -20,6 +20,10 @@ describe('where are some blogs saved initially', () => {
   test('blogs are returned as json', async () => {
     await api
       .get('/api/blogs')
+      .set(
+        'Authorization',
+        'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFra2kiLCJpZCI6IjVlODJlYWZlZDBhY2MyNzgyOGEzZmY1MCIsImlhdCI6MTU4NTY0ODcwNH0.9L8kT2ju81R7uc5ZUCJxicVXLosE4WiiVf36fFjafzU'
+      )
       .expect(200)
       .expect('Content-type', /application\/json/);
   });
@@ -30,7 +34,12 @@ describe('where are some blogs saved initially', () => {
   });
 
   test('all blogs have a property called id', async () => {
-    const response = await api.get('/api/blogs');
+    const response = await api
+      .get('/api/blogs')
+      .set(
+        'Authorization',
+        'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFra2kiLCJpZCI6IjVlODJlYWZlZDBhY2MyNzgyOGEzZmY1MCIsImlhdCI6MTU4NTY0ODcwNH0.9L8kT2ju81R7uc5ZUCJxicVXLosE4WiiVf36fFjafzU'
+      );
     response.body.forEach(blog => {
       expect(blog.id).toBeDefined();
     });
@@ -47,11 +56,16 @@ describe('addition of blogs', () => {
     };
     await api
       .post('/api/blogs')
+      .set(
+        'Authorization',
+        'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFra2kiLCJpZCI6IjVlODJlYWZlZDBhY2MyNzgyOGEzZmY1MCIsImlhdCI6MTU4NTY0ODcwNH0.9L8kT2ju81R7uc5ZUCJxicVXLosE4WiiVf36fFjafzU'
+      )
       .send(newBlog)
       .expect(201)
       .expect('Content-type', /application\/json/);
 
     const blogsAtEnd = await helper.blogsInDb();
+    console.log(blogsAtEnd);
     expect(blogsAtEnd.length).toBe(helper.initialBlogs.length + 1);
   });
 
@@ -63,6 +77,10 @@ describe('addition of blogs', () => {
     };
     await api
       .post('/api/blogs')
+      .set(
+        'Authorization',
+        'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFra2kiLCJpZCI6IjVlODJlYWZlZDBhY2MyNzgyOGEzZmY1MCIsImlhdCI6MTU4NTY0ODcwNH0.9L8kT2ju81R7uc5ZUCJxicVXLosE4WiiVf36fFjafzU'
+      )
       .send(newBlogSansLikes)
       .expect(201);
     const blogsAtEnd = await helper.blogsInDb();
@@ -70,7 +88,7 @@ describe('addition of blogs', () => {
     expect(blogsAtEnd.length).toBe(helper.initialBlogs.length + 1);
   });
 
-  test('fails with 400, if title and url are missing from the request', async () => {
+  test.only('fails with 400, if title and url are missing from the request', async () => {
     const blog = {
       author: 'Akhil Sagiraju',
       likes: 4
@@ -80,6 +98,18 @@ describe('addition of blogs', () => {
       .send(blog)
       .expect(400);
   });
+  test('fails with 401, if token is not provided', async () => {
+    const blog = {
+      title: 'My Testing Journey',
+      author: 'Akhil Sagiraju',
+      url: 'https://twitter.com/akhilalltheway',
+      likes: 4
+    };
+    await api
+      .post('/api/blogs')
+      .send(blog)
+      .expect(401);
+  });
 });
 
 describe('deletion of a blog', () => {
@@ -87,7 +117,13 @@ describe('deletion of a blog', () => {
     const blogsAtStart = await helper.blogsInDb();
     const blogToDelete = blogsAtStart[0];
 
-    await api.delete(`/api/blogs/${blogToDelete.id}`).expect(204);
+    await api
+      .delete(`/api/blogs/${blogToDelete.id}`)
+      .set(
+        'Authorization',
+        'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFra2kiLCJpZCI6IjVlODJlYWZlZDBhY2MyNzgyOGEzZmY1MCIsImlhdCI6MTU4NTY0ODcwNH0.9L8kT2ju81R7uc5ZUCJxicVXLosE4WiiVf36fFjafzU'
+      )
+      .expect(204);
     const blogsAtEnd = await helper.blogsInDb();
     expect(blogsAtEnd.length).toBe(blogsAtStart.length - 1);
 
