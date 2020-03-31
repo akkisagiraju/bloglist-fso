@@ -63,11 +63,7 @@ describe('addition of blogs', () => {
     };
     await api
       .post('/api/blogs')
-      .send(
-        newBlogSansLikes.likes
-          ? newBlogSansLikes
-          : { ...newBlogSansLikes, likes: 0 }
-      )
+      .send(newBlogSansLikes)
       .expect(201);
     const blogsAtEnd = await helper.blogsInDb();
     console.log(blogsAtEnd);
