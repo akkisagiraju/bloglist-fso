@@ -3,6 +3,9 @@ const blogRouter = require('express').Router();
 const Blog = require('../models/blog');
 const User = require('../models/user');
 require('express-async-errors');
+const middleware = require('../utils/middleware');
+
+blogRouter.use(middleware.tokenExtractor);
 
 blogRouter.get('/', async (request, response) => {
   const blogs = await Blog.find({}).populate('user', {
@@ -34,8 +37,17 @@ blogRouter.post('/', async (request, response) => {
 });
 
 blogRouter.delete('/:id', async (request, response) => {
-  await Blog.findByIdAndRemove(request.params.id);
-  response.status(204).end();
+  const decodedToken = jwt.verify(request.token, process.env.SECRET);
+  const user = await User.findById(decodedToken.id);
+  const blog = await Blog.findById(request.params.id);
+  if (blog.user.toString() === user._id.toString()) {
+    await Blog.findByIdAndRemove(request.params.id);
+    return response.status(204).end();
+  }
+  response
+    .status(401)
+    .send({ error: 'This blog does not belong to the user' })
+    .end();
 });
 
 blogRouter.put('/:id', async (request, response) => {

@@ -2,6 +2,9 @@ const bcrypt = require('bcrypt');
 require('express-async-errors');
 const usersRouter = require('express').Router();
 const User = require('../models/user');
+const middleware = require('../utils/middleware');
+
+usersRouter.use(middleware.tokenExtractor);
 
 usersRouter.post('/', async (request, response) => {
   const { name, username, password } = request.body;
